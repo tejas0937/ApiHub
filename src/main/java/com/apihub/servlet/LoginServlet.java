@@ -1,71 +1,76 @@
 package com.apihub.servlet;
 
-import com.apihub.model.User;
-import com.apihub.service.LoginService;
+import java.io.IOException;
+import java.sql.Connection;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import com.apihub.dao.UserDAO;
+import com.apihub.model.User;
+import com.apihub.util.DBUtil;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
-
-    private LoginService loginService = new LoginService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        resp.setContentType("text/plain");
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
 
-        try {
+        if (email == null || password == null) {
+            resp.sendRedirect(req.getContextPath() + "/login-page");
+            return;
+        }
 
-            String email = req.getParameter("email");
-            String password = req.getParameter("password");
+        try (Connection con = DBUtil.getConnection()) {
 
-            Map<String, Object> data =
-                    loginService.login(email, password);
+            UserDAO userDAO = new UserDAO(con);
 
-            if (data == null) {
-                resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                resp.getWriter().write("Invalid credentials");
+            User user = userDAO.findByEmailAndPassword(email, password);
+
+            if (user == null) {
+                resp.sendRedirect(req.getContextPath() + "/login-page");
                 return;
             }
 
-            User user = (User) data.get("user");
-            List<String> roles =
-                    (List<String>) data.get("roles");
+            List<String> roles = userDAO.findRolesByUserId(user.getId());
 
             HttpSession session = req.getSession(true);
-
             session.setAttribute("user", user);
             session.setAttribute("roles", roles);
 
             if (roles.contains("SUPER_ADMIN")) {
 
-                resp.sendRedirect("org/SuperAdmindashboard.html");
+                req.getRequestDispatcher(
+                        "/WEB-INF/views/superadmin/dashboard.jsp"
+                ).forward(req, resp);
 
             } else if (roles.contains("ORG_ADMIN")) {
 
-                resp.sendRedirect("org/dashboard.html");
+                req.getRequestDispatcher(
+                        "/WEB-INF/views/org/dashboard.jsp"
+                ).forward(req, resp);
 
             } else {
 
-                resp.sendRedirect("index.html");
+                req.getRequestDispatcher(
+                        "/WEB-INF/views/index.jsp"
+                ).forward(req, resp);
 
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
             resp.setStatus(500);
-            resp.getWriter().write("Login error");
+            resp.getWriter().write("Login failed due to server error.");
         }
     }
 }
