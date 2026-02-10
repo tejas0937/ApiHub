@@ -6,10 +6,7 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import com.apihub.dao.UserDAO;
 import com.apihub.model.User;
@@ -21,7 +18,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
+    	  System.out.println("LOGIN SERVLET HIT");
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
@@ -47,10 +44,18 @@ public class LoginServlet extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("roles", roles);
 
+            // ✅ role based dashboard routing
+
             if (roles.contains("SUPER_ADMIN")) {
 
                 req.getRequestDispatcher(
                         "/WEB-INF/views/superadmin/dashboard.jsp"
+                ).forward(req, resp);
+
+            } else if (roles.contains("PLATFORM_ADMIN")) {
+
+                req.getRequestDispatcher(
+                        "/WEB-INF/views/platform/dashboard.jsp"
                 ).forward(req, resp);
 
             } else if (roles.contains("ORG_ADMIN")) {
@@ -59,12 +64,15 @@ public class LoginServlet extends HttpServlet {
                         "/WEB-INF/views/org/dashboard.jsp"
                 ).forward(req, resp);
 
-            } else {
+            } else if (roles.contains("ORG_EMP")) {
 
                 req.getRequestDispatcher(
-                        "/WEB-INF/views/index.jsp"
+                        "/WEB-INF/views/org/employee-dashboard.jsp"
                 ).forward(req, resp);
 
+            } else {
+
+                resp.sendRedirect(req.getContextPath() + "/login-page");
             }
 
         } catch (Exception e) {

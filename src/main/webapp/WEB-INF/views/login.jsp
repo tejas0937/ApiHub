@@ -40,8 +40,8 @@ footer{border-top:1px solid #222;padding:22px;text-align:center;font-size:13px;o
 <header class="navbar">
  <div class="logo">APIHUB</div>
  <nav class="nav-links">
-  <a href="<%=request.getContextPath()%>/">Home</a>
-  <a href="<%=request.getContextPath()%>/register-page">Register</a>
+  <a href="<%=request.getContextPath()%>/index">Home</a>
+  <a href="<%=request.getContextPath()%>/register">Register</a>
  </nav>
 </header>
 

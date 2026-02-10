@@ -1,16 +1,12 @@
 package com.apihub.service;
 
+import java.sql.Connection;
+
 import com.apihub.dao.OrganizationDAO;
-import com.apihub.dao.RoleDAO;
 import com.apihub.dao.UserDAO;
-import com.apihub.dao.UserRoleDAO;
 import com.apihub.model.Organization;
-import com.apihub.model.Role;
 import com.apihub.model.User;
 import com.apihub.util.DBUtil;
-
-import java.sql.Connection;
-import java.time.LocalDateTime;
 
 public class OrganizationRegistrationService {
 
@@ -19,56 +15,42 @@ public class OrganizationRegistrationService {
             String orgEmail,
             String adminName,
             String adminEmail,
-            String passwordHash
+            String password
     ) throws Exception {
 
-        Connection con = null;
+        try (Connection con = DBUtil.getConnection()) {
 
-        try {
+            con.setAutoCommit(false);
 
-            con = DBUtil.getConnection();
-            con.setAutoCommit(false);   // start transaction
+            OrganizationDAO organizationDAO = new OrganizationDAO(con);
+            UserDAO userDAO = new UserDAO(con);
 
-            OrganizationDAO orgDao = new OrganizationDAO(con);
-            UserDAO userDao = new UserDAO(con);
-            RoleDAO roleDao = new RoleDAO(con);
-            UserRoleDAO userRoleDao = new UserRoleDAO(con);
-
-            // 1. create organization
+            // 1. Create organization
             Organization org = new Organization();
             org.setName(orgName);
             org.setEmail(orgEmail);
             org.setStatus("ACTIVE");
-            org.setCreatedAt(LocalDateTime.now());
 
-            long orgId = orgDao.insert(org);
+            long orgId = organizationDAO.insert(org);   // <<< FIXED
 
-            // 2. create org admin user
-            User user = new User();
-            user.setOrganizationId(orgId);
-            user.setFullName(adminName);
-            user.setEmail(adminEmail);
-            user.setPasswordHash(passwordHash);
-            user.setStatus("ACTIVE");
-            user.setCreatedAt(LocalDateTime.now());
+            // 2. Create org admin user
+            User admin = new User();
+            admin.setOrganizationId(orgId);
+            admin.setFullName(adminName);
+            admin.setEmail(adminEmail);
+            admin.setPassword(password);   // must map to your real password column
+            admin.setStatus("ACTIVE");
 
-            long userId = userDao.insert(user);
+            userDAO.insert(admin);
 
-            // 3. assign ORG_ADMIN role
-            Role role = roleDao.findByName("ORG_ADMIN");
-
-            userRoleDao.assignRole(userId, role.getId());
+            // 3. Assign ORG_ADMIN role
+            userDAO.assignRole(admin.getEmail(), "ORG_ADMIN");
 
             con.commit();
-
-        } catch (Exception ex) {
-
-            if (con != null) con.rollback();
-            throw ex;
-
-        } finally {
-
-            if (con != null) con.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 }

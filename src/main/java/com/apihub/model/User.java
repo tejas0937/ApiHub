@@ -1,22 +1,21 @@
 package com.apihub.model;
 
-import java.time.LocalDateTime;
-
 public class User {
 
-    private Long id;
-    private Long organizationId;   // NULL for platform users
+    private long id;
+    private Long organizationId;
     private String fullName;
     private String email;
-    private String passwordHash;
+    private String password;
     private String status;
-    private LocalDateTime createdAt;
 
-    public Long getId() {
+    // ---------- getters & setters ----------
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -44,12 +43,14 @@ public class User {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    // 🔴 this was missing
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    // 🔴 this was missing
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getStatus() {
@@ -58,13 +59,5 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }
