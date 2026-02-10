@@ -4,3 +4,6 @@ View organizations
 <a href="<%=request.getContextPath()%>/platform/apis">
 Manage API services
 </a>
+<a href="<%=request.getContextPath()%>/platform/plans">
+Manage plans
+</a>
