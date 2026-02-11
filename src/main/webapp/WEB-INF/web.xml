@@ -11,4 +11,14 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.xhtml</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <servlet-name>demoApiTest</servlet-name>
+    <servlet-class>com.apihub.servlet.DemoApiTest</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>demoApiTest</servlet-name>
+    <url-pattern>/api/demotest</url-pattern>
+</servlet-mapping>
+  
 </web-app>

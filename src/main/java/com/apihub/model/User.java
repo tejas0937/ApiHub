@@ -47,6 +47,15 @@ public class User {
     public String getPassword() {
         return password;
     }
+    private String passwordHash;
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
 
     // 🔴 this was missing
     public void setPassword(String password) {

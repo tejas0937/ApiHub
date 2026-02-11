@@ -13,22 +13,60 @@ background:radial-gradient(circle,rgba(200,200,200,.18),transparent 65%);}
 .light-bottom{position:fixed;bottom:-220px;left:-220px;width:520px;height:520px;
 background:radial-gradient(circle,rgba(160,160,160,.18),transparent 65%);}
 
-.navbar{padding:22px 60px;display:flex;justify-content:space-between;
-border-bottom:1px solid #222;}
+.navbar{
+ padding:22px 60px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ border-bottom:1px solid #222;
+}
 .logo{font-size:26px;font-weight:700;letter-spacing:3px;}
 .nav-links{display:flex;gap:36px;}
-.nav-links a{color:#fff;text-decoration:none;font-size:17px;}
+.nav-links a{
+ color:#fff;
+ text-decoration:none;
+ font-size:17px;
+ position:relative;
+}
+.nav-links a::after{
+ content:"";
+ position:absolute;
+ left:0;
+ bottom:-6px;
+ width:0;
+ height:2px;
+ background:#fff;
+ transition:.3s;
+}
+.nav-links a:hover::after{width:100%;}
 
 .page{min-height:78vh;display:flex;align-items:center;justify-content:center;}
 .card{width:420px;border:1px solid #222;border-radius:10px;padding:30px;}
 
 input,button{
- width:100%;padding:12px;border-radius:6px;border:1px solid #333;
- background:transparent;color:#fff;margin-bottom:16px;
+ width:100%;
+ padding:12px;
+ border-radius:6px;
+ border:1px solid #333;
+ background:transparent;
+ color:#fff;
+ margin-bottom:16px;
 }
-button{background:#fff;color:#000;font-weight:600;border:none;cursor:pointer;}
+button{
+ background:#fff;
+ color:#000;
+ font-weight:600;
+ border:none;
+ cursor:pointer;
+}
 
-footer{border-top:1px solid #222;padding:22px;text-align:center;font-size:13px;opacity:.7;}
+footer{
+ border-top:1px solid #222;
+ padding:22px;
+ text-align:center;
+ font-size:13px;
+ opacity:.7;
+}
 </style>
 </head>
 
@@ -41,7 +79,7 @@ footer{border-top:1px solid #222;padding:22px;text-align:center;font-size:13px;o
  <div class="logo">APIHUB</div>
  <nav class="nav-links">
   <a href="<%=request.getContextPath()%>/index">Home</a>
-  <a href="<%=request.getContextPath()%>/register">Register</a>
+  <a href="#">Login</a>
  </nav>
 </header>
 
@@ -57,6 +95,9 @@ footer{border-top:1px solid #222;padding:22px;text-align:center;font-size:13px;o
  </div>
 </section>
 
-<footer>© 2026 ApiHub</footer>
+<footer>
+ © 2026 ApiHub · API Management Platform
+</footer>
+
 </body>
 </html>

@@ -1,41 +1,124 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Super Admin Dashboard</title>
+<meta charset="UTF-8">
+<title>ApiHub – Super Admin</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Arial;}
-body{background:#000;color:#fff;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Arial,sans-serif;}
+body{background:#000;color:#fff;overflow-x:hidden;}
 
-.navbar{padding:22px 60px;display:flex;justify-content:space-between;border-bottom:1px solid #222;}
-.logo{font-size:26px;font-weight:700;}
-.page{padding:60px;}
-.card{border:1px solid #222;border-radius:10px;padding:24px;max-width:420px;}
+.light-top{
+ position:fixed;top:-220px;right:-220px;width:520px;height:520px;
+ background:radial-gradient(circle,rgba(200,200,200,.18),transparent 65%);
+ pointer-events:none;
+}
+.light-bottom{
+ position:fixed;bottom:-220px;left:-220px;width:520px;height:520px;
+ background:radial-gradient(circle,rgba(160,160,160,.18),transparent 65%);
+ pointer-events:none;
+}
+
+.page{
+ min-height:78vh;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ padding:60px 20px;
+ text-align:center;
+}
+
+.page h1{
+ font-size:40px;
+ margin-bottom:26px;
+}
+
+.card{
+ width:420px;
+ border:1px solid #222;
+ border-radius:12px;
+ padding:22px;
+ margin-bottom:18px;
+}
+
+.dash-link{
+ display:block;
+ text-decoration:none;
+ color:#fff;
+ font-size:18px;
+ padding:16px 0;
+ position:relative;
+}
+
+.dash-link::after{
+ content:"";
+ position:absolute;
+ left:50%;
+ bottom:-6px;
+ width:0;
+ height:2px;
+ background:#fff;
+ transition:.3s;
+ transform:translateX(-50%);
+}
+
+.dash-link:hover::after{
+ width:60%;
+}
+
+footer{
+ border-top:1px solid #222;
+ padding:22px;
+ text-align:center;
+ font-size:13px;
+ opacity:.7;
+}
 </style>
 </head>
 
 <body>
 
-<header class="navbar">
- <div class="logo">APIHUB</div>
- <div>
-  <a style="color:white;text-decoration:none"
-     href="<%=request.getContextPath()%>/">Home</a>
- </div>
-</header>
+<div class="light-top"></div>
+<div class="light-bottom"></div>
+
+<!-- Common navbar -->
+<jsp:include page="/WEB-INF/views/common/navbar.jsp"/>
 
 <section class="page">
 
- <h2>Super Admin Dashboard</h2><br>
+ <h1>Super Admin Panel</h1>
 
  <div class="card">
-  <p>Global monitoring of organizations, platform admins, APIs and plans.</p>
-  <br>
-  <p>Modules will be connected dynamically later.</p>
+  <a class="dash-link" href="<%=request.getContextPath()%>/platform/organizations">
+   All organizations
+  </a>
+ </div>
+
+ <div class="card">
+  <a class="dash-link" href="<%=request.getContextPath()%>/superadmin/platform-admins">
+   Manage platform admins
+  </a>
+ </div>
+
+ <div class="card">
+  <a class="dash-link" href="<%=request.getContextPath()%>/platform/apis">
+   All APIs overview
+  </a>
+ </div>
+
+ <div class="card">
+  <a class="dash-link" href="<%=request.getContextPath()%>/platform/plans">
+   Global plans management
+  </a>
  </div>
 
 </section>
+
+<footer>
+ © 2026 ApiHub · API Management Platform
+</footer>
 
 </body>
 </html>

@@ -17,6 +17,15 @@ public class AddEmployeeServlet extends HttpServlet {
 
     private OrgEmployeeService service =
             new OrgEmployeeService();
+    @Override
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        req.getRequestDispatcher(
+            "/WEB-INF/views/org/add-employee.jsp"
+        ).forward(req, resp);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req,

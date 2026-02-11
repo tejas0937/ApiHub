@@ -31,7 +31,7 @@ public class PlatformAddPlanServlet extends HttpServlet {
 
         List<String> roles = (List<String>) session.getAttribute("roles");
 
-        if (roles == null || !roles.contains("PLATFORM_ADMIN")) {
+        if (roles == null || !roles.contains("PLATFORM_ADMIN") && !roles.contains("SUPER_ADMIN")) {
             resp.setStatus(403);
             return;
         }

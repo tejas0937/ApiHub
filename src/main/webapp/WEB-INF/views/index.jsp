@@ -61,7 +61,7 @@ footer{
  <nav class="nav-links">
   <a href="<%=request.getContextPath()%>/">Home</a>
   <a href="#">About</a>
-  <a href="#">Services</a>
+  
   <a href="<%=request.getContextPath()%>/login-page">Login</a>
  </nav>
 </header>
